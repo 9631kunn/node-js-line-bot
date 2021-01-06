@@ -21,14 +21,6 @@ app.get("/webhook", (req, res) => {
 });
 app.post("/webhook", line.middleware(config), (req, res) => {
   console.log(req.body.events);
-  if (
-    req.body.events[0].replyToken === "00000000000000000000000000000000" &&
-    req.body.events[1].replyToken === "ffffffffffffffffffffffffffffffff"
-  ) {
-    res.send("Hello LINE BOT!(POST)");
-    console.log("疎通確認");
-    return;
-  }
   Promise.all(req.body.events.map(handleEvent)).then((result) =>
     res.json(result)
   );
@@ -41,9 +33,16 @@ async function handleEvent(event) {
     return Promise.resolve(null);
   }
 
+  let reply = "";
+  if (event.message.text === "test") {
+    reply = "あああ";
+  } else {
+    reply = "うんこ";
+  }
+
   return client.replyMessage(event.replyToken, {
     type: "text",
-    text: event.message.text,
+    text: reply,
   });
 }
 
