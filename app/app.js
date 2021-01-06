@@ -16,6 +16,9 @@ const app = express();
 app.get("/", (req, res) => {
   res.send("HELLO, LINEBOT");
 });
+app.get("/webhook", (req, res) => {
+  res.send("/webhook");
+});
 app.post("/webhook", line.middleware(config), (req, res) => {
   console.log(req.body.events);
   if (
