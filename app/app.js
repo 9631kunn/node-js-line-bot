@@ -49,18 +49,33 @@ function handleEvent(event) {
         default:
           throw new Error(`UNKNOWN MESSAGE: ${JSON.stringify(message)}`);
       }
+
     default:
-      throw new Error(`UNKNOWN MESSAGE: ${JSON.stringify(event)}`);
+      throw new Error(`UNKNOWN EVENT: ${JSON.stringify(event)}`);
   }
 }
 
 function handleText(message, replyToken, source) {
   switch (message.text) {
+    case "プロフィール":
+      if (source.userId) {
+        return client
+          .getProfile(source.userId)
+          .then((profile) =>
+            replyText(replyToken, [
+              `表示名: ${profile.displayName}`,
+              `カッケぇ〜一言: ${profile.statusMessage}`,
+            ])
+          );
+      } else {
+        return replyText(replyToken, "あ〜ん、取得できないよ〜");
+      }
     case "あああ":
-      return client.replyMessage({
-        type: "text",
-        text: "あ〜ん",
-      });
+      return replyText(replyToken, "あ〜ん");
+    case "test":
+      return replyText(replyToken, "テスト");
+    default:
+      replyText(replyToken, message.text);
   }
 }
 
