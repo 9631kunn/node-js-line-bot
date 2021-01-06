@@ -9,3 +9,7 @@ $ node app.js
 $ ngrok http 3000
 > ngrok by @inconshreveable                                    (Ctrl+C to quit)
 ```
+
+## CONFIRM LOG
+
+`$ heroku logs -t`
