@@ -44,4 +44,5 @@ async function handleEvent(event) {
   });
 }
 
-app.listen(PORT, console.log(`STARTED! ${env.URL}:${PORT}`));
+env.NOW_REGION ? (module.exports = app) : app.listen(PORT);
+console.log(`STARTED! ${PORT}`);
