@@ -35,22 +35,33 @@ app.post("/webhook", line.middleware(config), (req, res) => {
 
 const client = new line.Client(config);
 
-async function handleEvent(event) {
-  if (event.type !== "message" || event.message.type !== "text") {
-    return Promise.resolve(null);
+function handleEvent(event) {
+  if (event.replyToken && event.replyToken.match(/^(.)\1*$/)) {
+    return console.log("TEST HOOK RECEIVED: " + JSON.stringify(event.message));
   }
 
-  let reply = "";
-  if (event.message.text === "test") {
-    reply = "あああ";
-  } else {
-    reply = "うんこ";
+  switch (event.type) {
+    case "message":
+      const message = event.message;
+      switch (message.type) {
+        case "text":
+          return handleText(message, event.replyToken, event.source);
+        default:
+          throw new Error(`UNKNOWN MESSAGE: ${JSON.stringify(message)}`);
+      }
+    default:
+      throw new Error(`UNKNOWN MESSAGE: ${JSON.stringify(event)}`);
   }
+}
 
-  return client.replyMessage(event.replyToken, {
-    type: "text",
-    text: reply,
-  });
+function handleText(message, replyToken, source) {
+  switch (message.text) {
+    case "あああ":
+      return client.replyMessage({
+        type: "text",
+        text: "あ〜ん",
+      });
+  }
 }
 
 app.listen(PORT);
