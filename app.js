@@ -16,13 +16,13 @@ const app = express();
 app.get("/", (req, res) => {
   res.send("HELLO, LINEBOT");
 });
-app.post("/webhook", line.middleware(config), (res, req) => {
+app.post("/webhook", line.middleware(config), (req, res) => {
   console.log(req.body.events);
   if (
     req.body.events[0].replyToken === "00000000000000000000000000000000" &&
     req.body.events[1].replyToken === "ffffffffffffffffffffffffffffffff"
   ) {
-    res.send("HELLO, LINEBOT(POST)");
+    res.send("Hello LINE BOT!(POST)");
     console.log("疎通確認");
     return;
   }
