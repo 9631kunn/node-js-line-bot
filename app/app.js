@@ -55,6 +55,14 @@ function handleEvent(event) {
   }
 }
 
+const replyText = (token, texts) => {
+  texts = Array.isArray(texts) ? texts : [texts];
+  return client.replyMessage(
+    token,
+    texts.map((text) => ({ type: "text", text }))
+  );
+};
+
 function handleText(message, replyToken, source) {
   switch (message.text) {
     case "プロフィール":
