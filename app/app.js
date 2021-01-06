@@ -20,10 +20,17 @@ app.get("/webhook", (req, res) => {
   res.send("/webhook");
 });
 app.post("/webhook", line.middleware(config), (req, res) => {
-  console.log(req.body.events);
-  Promise.all(req.body.events.map(handleEvent)).then((result) =>
-    res.json(result)
-  );
+  // CONSOLE USER ID
+  if (req.body.destination) {
+    console.log("Destination User ID: " + req.body.destination);
+  }
+
+  Promise.all(req.body.events.map(handleEvent))
+    .then((result) => res.json(result))
+    .catch((error) => {
+      console.log(error);
+      res.status(500).end;
+    });
 });
 
 const client = new line.Client(config);
