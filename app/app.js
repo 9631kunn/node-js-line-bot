@@ -25,8 +25,8 @@ app.get("/db", (req, res, next) => {
       console.log(error);
       return;
     }
-    client.query("SELECT name, hands FROM rank", (error, result) => {
-      console.log(result.rows);
+    client.query("SELECT messages FROM messages", (error, result) => {
+      console.log(result);
     });
   });
   res.send({ title: "hello express & postgre" });
@@ -78,7 +78,7 @@ const InsertDb = (token) => {
       return;
     }
     client.query(query, (error, result) => {
-      console.log(result.rows);
+      console.log(result);
     });
   });
   return replyText(token, "格納しました");
