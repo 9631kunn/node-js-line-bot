@@ -70,6 +70,20 @@ function handleEvent(event) {
   }
 }
 
+const InsertDb = (token) => {
+  const query = "INSERT INTO messages (messages) VALUES ($1)";
+  db.pool.connect((error, client) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    client.query(query, (error, result) => {
+      console.log(result.rows);
+    });
+  });
+  return replyText(token, "格納しました");
+};
+
 const replyText = (token, texts) => {
   texts = Array.isArray(texts) ? texts : [texts];
   return client.replyMessage(
@@ -97,6 +111,8 @@ function handleText(message, replyToken, source) {
       return replyText(replyToken, "あ〜ん");
     case "test":
       return replyText(replyToken, "テスト");
+    case "db格納":
+      return InsertDb(replyToken);
     default:
       replyText(replyToken, message.text);
   }
