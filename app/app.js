@@ -5,6 +5,7 @@ const express = require("express");
 const line = require("@line/bot-sdk");
 const env = process.env;
 const PORT = env.PORT || 3000;
+const db = require("../db/db");
 
 const config = {
   channelSecret: env.LINE_BOT_CHANNEL_SECRET,
@@ -14,7 +15,21 @@ const config = {
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("HELLO, LINEBOT");
+  const param = { test_data: "This is sample API" };
+  res.header("Content-Type", "application/json; charset=utf-8");
+  res.send(param);
+});
+app.get("/db", (req, res, next) => {
+  db.pool.connect((error, client) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    client.query("SELECT name, hands FROM rank", (error, result) => {
+      console.log(result.rows);
+    });
+  });
+  res.send({ title: "hello express & postgre" });
 });
 app.get("/webhook", (req, res) => {
   res.send("/webhook");
